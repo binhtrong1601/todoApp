@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Input.module.css";
+import { v4 as uuidv4 } from "uuid";
 
 const TASK_KEY = "task";
 
@@ -17,10 +18,23 @@ const Input = () => {
   const handleAddTodo = () => {
     const newListProduct = [
       ...listProduct,
-      { id: Math.random(), name: todoValue, checked: false },
+      { id: uuidv4(), name: todoValue, checked: false },
     ];
     setListProduct(newListProduct);
+    setTodoValue("");
     localStorage.setItem(TASK_KEY, JSON.stringify(newListProduct));
+  };
+
+  const handleChangeTaskStatus = (e) => {
+    const id = e.target.id;
+    const data = listProduct.map((item) => {
+      if (item.id === id) {
+        item.checked = !item.checked;
+      }
+      return item;
+    });
+    setListProduct(data);
+    localStorage.setItem(TASK_KEY, JSON.stringify(data));
   };
 
   return (
@@ -34,8 +48,17 @@ const Input = () => {
 
       <ul style={{ listStyleType: "none" }}>
         {listProduct.map((product) => (
-          <li key={product.id}>
-            <input type={"checkbox"} />
+          <li
+            id={product.id}
+            key={`${product.id}`}
+            style={{ textDecorationLine: product.checked ? "line-through" : "" }}
+            onClick={handleChangeTaskStatus}
+          >
+            <input
+              id={product.id}
+              type={"checkbox"}
+              checked={product.checked ? true : false}
+            />
             {product.name}
           </li>
         ))}
@@ -43,5 +66,4 @@ const Input = () => {
     </div>
   );
 };
-
 export default Input;
