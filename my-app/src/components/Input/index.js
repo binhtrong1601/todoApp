@@ -25,18 +25,6 @@ const Input = () => {
     localStorage.setItem(TASK_KEY, JSON.stringify(newListProduct));
   };
 
-  const handleChangeTaskStatus = (e) => {
-    const id = e.target.id;
-    const data = listProduct.map((item) => {
-      if (item.id === id) {
-        item.checked = !item.checked;
-      }
-      return item;
-    });
-    setListProduct(data);
-    localStorage.setItem(TASK_KEY, JSON.stringify(data));
-  };
-
   return (
     <div style={{ padding: 20 }}>
       <input
@@ -52,7 +40,6 @@ const Input = () => {
             id={product.id}
             key={`${product.id}`}
             style={{ textDecorationLine: product.checked ? "line-through" : "" }}
-            onClick={handleChangeTaskStatus}
           >
             <input
               id={product.id}
